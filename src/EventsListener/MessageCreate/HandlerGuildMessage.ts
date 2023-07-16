@@ -4,7 +4,6 @@ import { Defines } from 'Core/Defines';
 import { HandlerMessageBase } from './HandlerMessageBase';
 import { ClassifyBotCommand } from './ExecBotCommand/ClassifyBotCommand';
 import { IExecBotCommand } from './ExecBotCommand/IExecBotCommand';
-import { ExecBotCommandNone } from './ExecBotCommand/None/ExecBotCommandNone';
 import { DistributeMessageObserver } from './ExecObserveCommand/DistributeMessageObserver';
 
 export class HandlerGuildMessage extends HandlerMessageBase {
@@ -17,7 +16,7 @@ export class HandlerGuildMessage extends HandlerMessageBase {
 
     constructor(message: Message) {
         super(message);
-        this.contentSplitedArray = this.content.split(" ").filter(Boolean);
+        this.contentSplitedArray = message.content.split(" ").filter(Boolean);
 
         // 以下、上位で GuildMessage 保証
         this.guild = this.message.guild!;
@@ -32,13 +31,13 @@ export class HandlerGuildMessage extends HandlerMessageBase {
 
     private resolveBotCommand() {
         const botCommandWithArgs: string[] = this.makeBotCommandResolvable(this.contentSplitedArray);
-        const command: IExecBotCommand = this.getBotCommand(botCommandWithArgs, this);
-        if (command instanceof ExecBotCommandNone) return;
+        const command: IExecBotCommand | null = this.getBotCommand(botCommandWithArgs, this);
+        if (!command) return;
 
         command.ExecuteWithCommonProcess();
     }
 
-    private getBotCommand(botCommandWithArgs: string[], handler: HandlerGuildMessage): IExecBotCommand {
+    private getBotCommand(botCommandWithArgs: string[], handler: HandlerGuildMessage): IExecBotCommand | null {
         return ClassifyBotCommand.GetEBotCommandFromValue(botCommandWithArgs, handler);
     }
 

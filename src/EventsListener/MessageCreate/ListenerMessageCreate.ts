@@ -6,13 +6,13 @@ import { HandlerDirectMessage } from './HandlerDirectMessage';
 import { HandlerGuildMessage } from './HandlerGuildMessage';
 import { ApplicationException } from 'Utility/ApplicationException';
 
-export class RegistMessageCreate implements IEventsListener {
+export class ListenerMessageCreate implements IEventsListener {
 
     static registerd: boolean = false;
 
     public Register(client: Client): void {
-        if (RegistMessageCreate.registerd) return;
-        RegistMessageCreate.registerd = true;
+        if (ListenerMessageCreate.registerd) return;
+        ListenerMessageCreate.registerd = true;
 
         client.on(Events.MessageCreate, (message: Message) => {
             if (this.disallowProcess(message)) return;

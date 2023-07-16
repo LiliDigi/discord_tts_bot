@@ -1,5 +1,6 @@
 import * as Log4js from "log4js";
 export class Log {
+    private constructor() { }
 
     private static loggerLevel: string = 'all';
 

@@ -3,13 +3,13 @@ import { Client, Events } from 'discord.js';
 import { IEventsListener } from '../IEventsListener';
 import { HandlerClientReady } from './HandlerClientReady';
 
-export class RegistClientReady implements IEventsListener {
+export class ListenerClientReady implements IEventsListener {
 
     static registerd: boolean = false;
 
     public Register(client: Client): void {
-        if (RegistClientReady.registerd) return;
-        RegistClientReady.registerd = true;
+        if (ListenerClientReady.registerd) return;
+        ListenerClientReady.registerd = true;
 
         client.once(Events.ClientReady, (client: Client): void => {
             const handler = new HandlerClientReady(client);

@@ -17,6 +17,10 @@ class Main {
         await this.attemptLogin(client);
     }
 
+    public SummarizeException(applicationException: ApplicationException) {
+        console.log(applicationException);
+    }
+
     private configureLog4js() {
         Log.ConfigureSingletonLogger();
     }
@@ -40,10 +44,6 @@ class Main {
             await Utility.Sleep(Defines.ATTEMPT_LOGIN_TIMEOUT_MS);
         }
     }
-
-    public summarizeException(applicationException: ApplicationException) {
-        console.log(applicationException);
-    }
 }
 
 (async () => {
@@ -55,7 +55,7 @@ class Main {
     } catch (exception) {
 
         if (exception instanceof ApplicationException) {
-            main.summarizeException(exception);
+            main.SummarizeException(exception);
         } else {
             console.log(exception);
         }

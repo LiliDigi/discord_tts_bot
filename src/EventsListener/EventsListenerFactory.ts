@@ -1,8 +1,8 @@
 import { Client } from 'discord.js';
 
 import { IEventsListener } from './IEventsListener';
-import { RegistClientReady } from './ClientReady/RegistClientReady';
-import { RegistMessageCreate } from './MessageCreate/RegistMessageCreate';
+import { ListenerClientReady } from './ClientReady/ListenerClientReady';
+import { ListenerMessageCreate } from './MessageCreate/ListenerMessageCreate';
 
 export class EventsListenerFactory implements IEventsListener {
 
@@ -13,8 +13,8 @@ export class EventsListenerFactory implements IEventsListener {
         EventsListenerFactory.registerd = true;
 
         const registerTarget: IEventsListener[] = [
-            new RegistClientReady(),
-            new RegistMessageCreate(),
+            new ListenerClientReady(),
+            new ListenerMessageCreate(),
         ];
 
         for (const target of registerTarget) {

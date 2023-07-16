@@ -9,16 +9,12 @@ export abstract class HandlerMessageBase implements IHandlerMessage {
     userSender: User;
     userMe: User;
 
-    content: string;
-
     constructor(message: Message) {
         this.client = message.client;
         this.channel = message.channel;
         this.message = message;
         this.userSender = message.author;
         this.userMe = this.client.user!; // ログイン済みのため、取得保証
-
-        this.content = this.message.content;
     }
 
     abstract ExecListenCommand(): void;

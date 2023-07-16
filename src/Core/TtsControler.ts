@@ -6,8 +6,8 @@ import { Readable } from 'stream';
 // TODO排他制御
 
 interface TtsConnection {
-    voiceConnection: VoiceConnection,
-    textChannel: Channel
+    voiceConnection: VoiceConnection;
+    textChannel: Channel;
     audioPlayer: AudioPlayer;
 }
 
