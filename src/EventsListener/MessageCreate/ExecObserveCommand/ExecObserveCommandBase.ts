@@ -10,11 +10,11 @@ export abstract class ExecObserveCommandBase implements IExecObserveCommand {
 
     public ExecuteWithCommonProcess(): void {
         this.preExecute();
-        this.Execute();
+        this.execute();
         this.postExecute();
     }
 
-    public abstract Execute(): void;
+    public abstract execute(): void;
 
     private preExecute() {
     }

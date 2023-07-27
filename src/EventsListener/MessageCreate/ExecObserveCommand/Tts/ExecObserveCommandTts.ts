@@ -4,7 +4,7 @@ import { TtsControler } from 'Core/TtsControler';
 
 export class ExecObserveCommandTts extends ExecObserveCommandBase {
 
-    Execute(): void {
+    execute(): void {
         if (!this.handler.message.content) return;
 
         const text = this.replaceText(this.handler.message);
