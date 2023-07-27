@@ -52,14 +52,17 @@ export class ExecBotCommandTts extends ExecBotCommandBase {
             switch (reason) {
                 case EReplyReason.senderNotInChannel: {
                     embed.setDescription("先にボイスチャンネルに入ってください");
+                    embed.setColor("Yellow");
                     break;
                 }
                 case EReplyReason.addConnection: {
                     embed.setDescription(`${handler.memberSender}が読み上げを開始しました`);
+                    embed.setColor("Green");
                     break;
                 }
                 case EReplyReason.removeConnection: {
                     embed.setDescription(`${handler.memberSender}が読み上げを終了しました`);
+                    embed.setColor("Red");
                     break;
                 }
             }
