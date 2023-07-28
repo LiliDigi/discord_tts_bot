@@ -4,6 +4,7 @@ import { IHandlerMessage } from '../IHandlerMessage';
 import { ExecBotCommandHelp } from "./Help/ExecBotCommandHelp";
 import { ExecBotCommandTts } from './Tts/ExecBotCommandTts';
 import { ExecBotCommandWikipedia } from './Wikipedia/ExecBotCommandWikipedia';
+import { ExecBotCommandTranslate } from './Translate/ExecBotCommandTranslate';
 
 export class ClassifyBotCommand {
     public static GetEBotCommandFromValue(botCommandWithArgs: string[], handler: IHandlerMessage): IExecBotCommand | null {
@@ -17,6 +18,9 @@ export class ClassifyBotCommand {
             case 'wikipedia':
             case 'w':
                 return new ExecBotCommandWikipedia(botCommandWithArgs, handler);
+            case 'translate':
+            case 'trans':
+                return new ExecBotCommandTranslate(botCommandWithArgs, handler);
             default:
                 return null;
         }
