@@ -3,4 +3,5 @@ export interface IExecCommand {
     handler: IEventsHandler;
 
     ExecuteWithCommonProcess(): void;
+    Execute(): void;
 }

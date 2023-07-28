@@ -17,11 +17,11 @@ export abstract class ExecBotCommandBase implements IExecBotCommand {
 
     public ExecuteWithCommonProcess(): void {
         this.preExecute();
-        this.execute();
+        this.Execute();
         this.postExecute();
     }
 
-    public abstract execute(): void;
+    public abstract Execute(): void;
 
     private preExecute() {
         Log.Info(`ExecBotCommand(${this.botCommand}) - ${this.handler.userSender.username}`);

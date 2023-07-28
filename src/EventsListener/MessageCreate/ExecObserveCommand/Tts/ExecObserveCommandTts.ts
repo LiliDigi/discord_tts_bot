@@ -4,7 +4,7 @@ import { TtsControler } from 'Core/TtsControler';
 
 export class ExecObserveCommandTts extends ExecObserveCommandBase {
 
-    execute(): void {
+    public Execute(): void {
         if (!this.handler.message.content) return;
 
         const text = this.convertTextForVc(this.handler.message);
@@ -84,7 +84,7 @@ export class ExecObserveCommandTts extends ExecObserveCommandBase {
     }
 
     private replaceTextEmojis(text: string): string {
-        text = text.replace(/<a??:(\w+):\d{18}>/g, " $1 ");
+        text = text.replace(/<a??:(\w+):\d+>/g, " $1 ");
         return text;
     }
 

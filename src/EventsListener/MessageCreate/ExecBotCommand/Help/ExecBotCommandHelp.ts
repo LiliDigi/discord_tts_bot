@@ -4,7 +4,7 @@ import { EmbedBuilder } from '@discordjs/builders';
 
 export class ExecBotCommandHelp extends ExecBotCommandBase {
 
-    execute(): void {
+    public Execute(): void {
         MakeMessageEmbed.MakeDefault(this.handler).then((embed: EmbedBuilder) => {
 
             let desc = new Array();

@@ -13,7 +13,7 @@ enum EReplyReason {
 
 export class ExecBotCommandTts extends ExecBotCommandBase {
 
-    execute(): void {
+    public Execute(): void {
         if (!(this.handler instanceof HandlerGuildMessage)) return;
 
         const ttsControler = new TtsControler();
@@ -24,6 +24,8 @@ export class ExecBotCommandTts extends ExecBotCommandBase {
         // 既に自分が入っている時は、退出して終了
         if (voiceChannelMe) {
             ttsControler.RemoveConnection(voiceChannelMe, this.handler.channel);
+            const voiceMe = this.handler.memberMe.voice;
+            voiceMe.disconnect();
             this.replyDispatcher(EReplyReason.removeConnection, this.handler);
             return;
         }

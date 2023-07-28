@@ -49,6 +49,7 @@ export class TtsControler {
             TtsControler.ttsConnections.delete(ttsConnection);
 
             return release;
+
         }).then((release: () => void) => {
             release();
         });
@@ -73,6 +74,7 @@ export class TtsControler {
             });
 
             return release;
+
         }).then((release: () => void) => {
             release();
         });
