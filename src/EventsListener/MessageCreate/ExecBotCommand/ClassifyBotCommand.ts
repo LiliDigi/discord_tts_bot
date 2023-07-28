@@ -3,6 +3,7 @@ import { IHandlerMessage } from '../IHandlerMessage';
 
 import { ExecBotCommandHelp } from "./Help/ExecBotCommandHelp";
 import { ExecBotCommandTts } from './Tts/ExecBotCommandTts';
+import { ExecBotCommandWikipedia } from './Wikipedia/ExecBotCommandWikipedia';
 
 export class ClassifyBotCommand {
     public static GetEBotCommandFromValue(botCommandWithArgs: string[], handler: IHandlerMessage): IExecBotCommand | null {
@@ -13,6 +14,9 @@ export class ClassifyBotCommand {
                 return new ExecBotCommandHelp(botCommandWithArgs, handler);
             case 'tts':
                 return new ExecBotCommandTts(botCommandWithArgs, handler);
+            case 'wikipedia':
+            case 'w':
+                return new ExecBotCommandWikipedia(botCommandWithArgs, handler);
             default:
                 return null;
         }
