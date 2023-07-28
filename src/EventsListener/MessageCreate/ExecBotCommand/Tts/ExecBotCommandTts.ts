@@ -24,8 +24,13 @@ export class ExecBotCommandTts extends ExecBotCommandBase {
         // 既に自分が入っている時は、退出して終了
         if (voiceChannelMe) {
             ttsControler.RemoveConnection(voiceChannelMe, this.handler.channel);
-            const voiceMe = this.handler.memberMe.voice;
-            voiceMe.disconnect();
+
+            // 同じguildからのコマンド実行時のみ、退出
+            if (voiceChannelMe.guild === voiceChannelSender?.guild) {
+                const voiceMe = this.handler.memberMe.voice;
+                voiceMe.disconnect();
+            }
+
             this.replyDispatcher(EReplyReason.removeConnection, this.handler);
             return;
         }
