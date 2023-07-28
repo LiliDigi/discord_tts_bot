@@ -5,7 +5,6 @@ import { EmbedBuilder } from '@discordjs/builders';
 import Axios, { AxiosInstance } from 'axios';
 import Clone from 'clone';
 
-
 export class ExecBotCommandWikipedia extends ExecBotCommandBase {
 
     private wordTarget: string;
@@ -21,9 +20,7 @@ export class ExecBotCommandWikipedia extends ExecBotCommandBase {
 
         axios.get('/').then((response) => {
             const pages = response.data.query.pages;
-            this.replyDispatcher(pages, this.handler);
-        }).catch((reason) => {
-            console.log(reason);
+            this.replyDispatcher(pages);
         });
     }
 
@@ -40,7 +37,7 @@ export class ExecBotCommandWikipedia extends ExecBotCommandBase {
             }
         }
 
-        if (this.wordTarget) {
+        if (wordTarget) {
             Object.assign(request.params, { titles: wordTarget });
         }
         else { // ワードがなければおまかせ表示
@@ -52,7 +49,7 @@ export class ExecBotCommandWikipedia extends ExecBotCommandBase {
         return axios;
     }
 
-    private replyDispatcher(pages: any, handler: IHandlerMessage): void {
+    private replyDispatcher(pages: any): void {
         MakeMessageEmbed.MakeDefault(this.handler).then((embedOrg: EmbedBuilder) => {
 
             const embeds: EmbedBuilder[] = [];
@@ -73,7 +70,6 @@ export class ExecBotCommandWikipedia extends ExecBotCommandBase {
             }
 
             this.handler.message.reply({ embeds });
-
         });
     }
 }

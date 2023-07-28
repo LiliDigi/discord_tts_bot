@@ -48,7 +48,7 @@ export class ExecBotCommandTts extends ExecBotCommandBase {
 
             embed.setAuthor({
                 name: "テキスト読み上げ",
-                iconURL: Defines.GUILD_L_ICON_URL
+                iconURL: Defines.URL_GUILD_L_ICON
             })
 
             switch (reason) {
@@ -69,7 +69,7 @@ export class ExecBotCommandTts extends ExecBotCommandBase {
                 }
             }
 
-            this.handler.message.reply({
+            handler.message.reply({
                 embeds: [embed],
             })
         });
