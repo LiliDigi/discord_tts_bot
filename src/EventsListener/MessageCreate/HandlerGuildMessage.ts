@@ -25,8 +25,8 @@ export class HandlerGuildMessage extends HandlerMessageBase {
     }
 
     public ExecListenCommand(): void {
-        this.resolveBotCommand();
         DistributeMessageObserver.Observe(this);
+        this.resolveBotCommand();
     }
 
     private resolveBotCommand() {

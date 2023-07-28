@@ -22,7 +22,7 @@
     "typescript": "^5.1.6"
   },
   "name": "discord_tts_bot",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "src/index.ts",
   "scripts": {
     "start": "npm run build:live",

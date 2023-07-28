@@ -32,34 +32,38 @@ export class TtsControler {
             };
 
             TtsControler.ttsConnections.add(ttsConnection);
-            release();
+            return release;
 
+        }).then((release: () => void) => {
+            release();
         });
     }
 
     public RemoveConnection(voiceChannel: VoiceBasedChannel, textChannel: Channel) {
-        TtsControler.mutex.acquire().then((release) => {
+        TtsControler.mutex.acquire().then((release: () => void) => {
 
             const ttsConnection = this.findTtsConnection(textChannel);
-            if (!ttsConnection) return;
+            if (!ttsConnection) return release;
 
             ttsConnection.voiceConnection.destroy();
             TtsControler.ttsConnections.delete(ttsConnection);
 
+            return release;
+        }).then((release: () => void) => {
             release();
         });
     }
 
     public PlayTtsChannel(text: string, channel: Channel): void {
-        TtsControler.mutex.acquire().then((release) => {
+        TtsControler.mutex.acquire().then((release: () => void) => {
 
             const ttsConnection = this.findTtsConnection(channel);
-            if (!ttsConnection) return;
+            if (!ttsConnection) return release;
 
             const request = this.makeSpeechRequest(text);
             TtsControler.speechClient.synthesizeSpeech(request).then(([response]) => {
                 const audioContent = response.audioContent;
-                if (!audioContent) return;
+                if (!audioContent) return release;
 
                 const stream = Readable.from(audioContent);
                 const resource = createAudioResource(stream);
@@ -68,6 +72,8 @@ export class TtsControler {
                 ttsConnection.audioPlayer.play(resource);
             });
 
+            return release;
+        }).then((release: () => void) => {
             release();
         });
     }
