@@ -35,6 +35,7 @@ export class ListenerMessageCreate implements IEventsListener {
 
     private disallowProcess(message: Message): boolean {
         if (message.author.bot) return true;
+        if (!message.content) return true;
         return false;
     }
 
