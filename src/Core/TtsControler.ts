@@ -1,8 +1,8 @@
 import { AudioPlayer, VoiceConnection, createAudioPlayer, createAudioResource, joinVoiceChannel } from "@discordjs/voice";
 import textToSpeech, { protos } from '@google-cloud/text-to-speech';
-import { Channel, GuildChannel, VoiceChannel, VoiceState } from "discord.js";
+import { Channel, GuildChannel, VoiceState } from "discord.js";
 import { Readable } from 'stream';
-import { Mutex } from 'await-semaphore';
+import { ApplicationMutex } from "Utility/ApplicationMutex";
 
 interface TtsConnection {
     voiceConnection: VoiceConnection;
@@ -14,13 +14,13 @@ export class TtsControler {
 
     static ttsConnections: Set<TtsConnection> = new Set();
     static speechClient = new textToSpeech.TextToSpeechClient();
-    static mutex = new Mutex();
+    static mutex = new ApplicationMutex();
 
     public AddConnection(voice: VoiceState, textChannel: Channel) {
         const voiceChannel = voice.channel;
         if (!voiceChannel) return;
 
-        TtsControler.mutex.acquire().then((release) => {
+        TtsControler.mutex.Lock().then((unLock) => {
 
             const connection = joinVoiceChannel({
                 channelId: voiceChannel.id,
@@ -35,15 +35,15 @@ export class TtsControler {
             };
 
             TtsControler.ttsConnections.add(ttsConnection);
-            return release;
+            return unLock;
 
-        }).then((release: () => void) => {
-            release();
+        }).then((unLock: () => void) => {
+            unLock();
         });
     }
 
     public RemoveConnection(voice: VoiceState, textChannel: Channel) {
-        TtsControler.mutex.acquire().then((release: () => void) => {
+        TtsControler.mutex.Lock().then((unLock: () => void) => {
 
             const ttsConnection = this.findTtsConnection(textChannel);
 
@@ -63,35 +63,35 @@ export class TtsControler {
                 }
             }
 
-            return release;
+            return unLock;
 
-        }).then((release: () => void) => {
-            release();
+        }).then((unLock: () => void) => {
+            unLock();
         });
     }
 
     public PlayTtsChannel(text: string, channel: Channel): void {
-        TtsControler.mutex.acquire().then((release: () => void) => {
+        TtsControler.mutex.Lock().then((unLock: () => void) => {
 
             const ttsConnection = this.findTtsConnection(channel);
-            if (!ttsConnection) return release;
+            if (!ttsConnection) return unLock;
 
             const request = this.makeSpeechRequest(text);
             TtsControler.speechClient.synthesizeSpeech(request).then(([response]) => {
                 const audioContent = response.audioContent;
-                if (!audioContent) return release;
+                if (!audioContent) return;
 
                 const stream = Readable.from(audioContent);
                 const resource = createAudioResource(stream);
 
                 ttsConnection.voiceConnection.subscribe(ttsConnection.audioPlayer);
                 ttsConnection.audioPlayer.play(resource);
-            });
+            }); // 打ちっ放しでよいため、排他制御に絡ませる必要なし
 
-            return release;
+            return unLock;
 
-        }).then((release: () => void) => {
-            release();
+        }).then((unLock: () => void) => {
+            unLock();
         });
     }
 
