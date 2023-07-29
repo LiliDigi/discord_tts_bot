@@ -1,3 +1,3 @@
 # discord_tts_bot
 
-オブジェクト指向とTypeScriptの勉強ついでで1日ぐらいで作ったやつ
+オブジェクト指向とTypeScriptの勉強
