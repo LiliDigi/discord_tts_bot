@@ -1,6 +1,6 @@
 import { AudioPlayer, VoiceConnection, createAudioPlayer, createAudioResource, joinVoiceChannel } from "@discordjs/voice";
 import textToSpeech, { protos } from '@google-cloud/text-to-speech';
-import { Channel, VoiceBasedChannel } from "discord.js";
+import { Channel, GuildChannel, VoiceChannel, VoiceState } from "discord.js";
 import { Readable } from 'stream';
 import { Mutex } from 'await-semaphore';
 
@@ -16,13 +16,16 @@ export class TtsControler {
     static speechClient = new textToSpeech.TextToSpeechClient();
     static mutex = new Mutex();
 
-    public AddConnection(voiceChannel: VoiceBasedChannel, textChannel: Channel) {
+    public AddConnection(voice: VoiceState, textChannel: Channel) {
+        const voiceChannel = voice.channel;
+        if (!voiceChannel) return;
+
         TtsControler.mutex.acquire().then((release) => {
 
             const connection = joinVoiceChannel({
                 channelId: voiceChannel.id,
-                guildId: voiceChannel.guild.id,
-                adapterCreator: voiceChannel.guild.voiceAdapterCreator,
+                guildId: voice.guild.id,
+                adapterCreator: voice.guild.voiceAdapterCreator,
             });
 
             const ttsConnection: TtsConnection = {
@@ -39,14 +42,26 @@ export class TtsControler {
         });
     }
 
-    public RemoveConnection(voiceChannel: VoiceBasedChannel, textChannel: Channel) {
+    public RemoveConnection(voice: VoiceState, textChannel: Channel) {
         TtsControler.mutex.acquire().then((release: () => void) => {
 
             const ttsConnection = this.findTtsConnection(textChannel);
-            if (!ttsConnection) return release;
 
-            ttsConnection.voiceConnection.destroy();
-            TtsControler.ttsConnections.delete(ttsConnection);
+            // 接続情報がありの場合、それを元に退出
+            // なしの場合、投稿チャンネルのguildで退出(接続と同じguildに限る)
+            if (ttsConnection) {
+                ttsConnection.voiceConnection.destroy();
+                TtsControler.ttsConnections.delete(ttsConnection);
+            }
+            else {
+                // 接続と投稿チャンネルのguildが同一の場合のみ退出
+                if (
+                    textChannel instanceof GuildChannel &&
+                    voice.guild === textChannel.guild
+                ) {
+                    voice.disconnect();
+                }
+            }
 
             return release;
 

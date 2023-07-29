@@ -2,7 +2,7 @@ import { TtsControler } from 'Core/TtsControler';
 import { ExecBotCommandBase } from '../ExecBotCommandBase';
 import { HandlerGuildMessage } from 'EventsListener/MessageCreate/HandlerGuildMessage';
 import { MakeMessageEmbed } from 'Core/MakeMessageEmbed';
-import { EmbedBuilder } from 'discord.js';
+import { EmbedBuilder, VoiceState } from 'discord.js';
 import { Defines } from 'Core/Defines';
 
 enum EReplyReason {
@@ -18,33 +18,30 @@ export class ExecBotCommandTts extends ExecBotCommandBase {
 
         const ttsControler = new TtsControler();
 
-        const voiceChannelSender = this.handler.memberSender.voice.channel;
-        const voiceChannelMe = this.handler.memberMe.voice.channel; // いないときにnullになる？
+        const voiceSender = this.handler.memberSender.voice;
+        const voiceMe = this.handler.memberMe.voice;
 
         // 既に自分が入っている時は、退出して終了
-        if (voiceChannelMe) {
-            ttsControler.RemoveConnection(voiceChannelMe, this.handler.channel);
-
-            // 同じguildからのコマンド実行時のみ、退出
-            if (voiceChannelMe.guild === voiceChannelSender?.guild) {
-                const voiceMe = this.handler.memberMe.voice;
-                voiceMe.disconnect();
-            }
-
+        if (this.isInVc(voiceMe)) {
+            ttsControler.RemoveConnection(voiceMe, this.handler.channel);
             this.replyDispatcher(EReplyReason.removeConnection, this.handler);
             return;
         }
 
         // コマンド者が入っていない時は、メッセージ出して終了
-        if (!voiceChannelSender) {
+        if (!this.isInVc(voiceSender)) {
             this.replyDispatcher(EReplyReason.senderNotInChannel, this.handler);
             return;
         }
 
         // ボイスチャンネルに入る
-        ttsControler.AddConnection(voiceChannelSender, this.handler.channel);
+        ttsControler.AddConnection(voiceSender, this.handler.channel);
         this.replyDispatcher(EReplyReason.addConnection, this.handler);
         return;
+    }
+
+    private isInVc(voice: VoiceState): boolean {
+        return (!!voice.channel);
     }
 
     private replyDispatcher(reason: EReplyReason, handler: HandlerGuildMessage): void {
