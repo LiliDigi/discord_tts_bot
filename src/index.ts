@@ -49,6 +49,7 @@ class Main {
 (async () => {
     const main = new Main();
 
+    // TODO:中が非同期なので搬出例外がここまで来ない気がする
     try {
         main.StartBot();
 

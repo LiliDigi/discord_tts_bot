@@ -30,10 +30,15 @@ export class HandlerGuildMessage extends HandlerMessageBase {
     }
 
     private resolveBotCommand() {
-        const botCommandWithArgs: string[] = this.makeBotCommandResolvable(this.contentSplitedArray);
+        // コマンドフォーマットでないなら終了
+        const botCommandWithArgs: string[] | null = this.makeBotCommandResolvable(this.contentSplitedArray);
+        if (!botCommandWithArgs) return;
+
+        // 存在しないコマンドなら終了
         const command: IExecBotCommand | null = this.getBotCommand(botCommandWithArgs, this);
         if (!command) return;
 
+        // コマンド実行
         command.ExecuteWithCommonProcess();
     }
 
@@ -41,22 +46,23 @@ export class HandlerGuildMessage extends HandlerMessageBase {
         return ClassifyBotCommand.GetEBotCommandFromValue(botCommandWithArgs, handler);
     }
 
-    private makeBotCommandResolvable(stringArray: string[]): string[] {
-        let botCommandWithArgs: string[] = stringArray.concat();
+    private makeBotCommandResolvable(stringArray: string[]): string[] | null {
+        let botCommandWithArgs: string[] = stringArray.concat(); // コピー
 
         if (this.hasBotCommandPrefix(stringArray)) {
             // prefix 分を除く
             botCommandWithArgs[0] = botCommandWithArgs[0].slice(Defines.BOT_COMMAND_PREFIX.length);
+            return botCommandWithArgs;
         }
         else if (this.hasMentionToMeFirst(stringArray)) {
             // 先頭のメンションを除く
             botCommandWithArgs.shift();
+            return botCommandWithArgs;
         }
         else {
-            // コマンドではない、何もしない
+            // コマンドではない
+            return null;
         }
-
-        return botCommandWithArgs;
     }
 
     private hasBotCommandPrefix(stringArray: string[]) {
