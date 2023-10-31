@@ -43,7 +43,7 @@ export class HandlerGuildMessage extends HandlerMessageBase {
     }
 
     private getBotCommand(botCommandArgs: string[], handler: HandlerGuildMessage): IExecBotCommand | null {
-        return ClassifyBotCommand.GetEBotCommandFromValue(botCommandArgs, handler);
+        return ClassifyBotCommand.GetClassifiedInstance(botCommandArgs, handler);
     }
 
     private makeBotCommandResolvable(stringArray: string[]): string[] | null {

@@ -6,7 +6,7 @@ import { ExecBotCommandTts } from './Tts/ExecBotCommandTts';
 import { ExecBotCommandWikipedia } from './Wikipedia/ExecBotCommandWikipedia';
 
 export class ClassifyBotCommand {
-    public static GetEBotCommandFromValue(botCommandArgs: string[], handler: IHandlerMessage): IExecBotCommand | null {
+    public static GetClassifiedInstance(botCommandArgs: string[], handler: IHandlerMessage): IExecBotCommand | null {
         const command: string = botCommandArgs[0];
         switch (command) {
             case 'help':
