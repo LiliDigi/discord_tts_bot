@@ -31,33 +31,33 @@ export class HandlerGuildMessage extends HandlerMessageBase {
 
     private resolveBotCommand() {
         // コマンドフォーマットでないなら終了
-        const botCommandWithArgs: string[] | null = this.makeBotCommandResolvable(this.contentSplitedArray);
-        if (!botCommandWithArgs) return;
+        const botCommandArgs: string[] | null = this.makeBotCommandResolvable(this.contentSplitedArray);
+        if (!botCommandArgs) return;
 
         // 存在しないコマンドなら終了
-        const command: IExecBotCommand | null = this.getBotCommand(botCommandWithArgs, this);
+        const command: IExecBotCommand | null = this.getBotCommand(botCommandArgs, this);
         if (!command) return;
 
         // コマンド実行
         command.ExecuteWithCommonProcess();
     }
 
-    private getBotCommand(botCommandWithArgs: string[], handler: HandlerGuildMessage): IExecBotCommand | null {
-        return ClassifyBotCommand.GetEBotCommandFromValue(botCommandWithArgs, handler);
+    private getBotCommand(botCommandArgs: string[], handler: HandlerGuildMessage): IExecBotCommand | null {
+        return ClassifyBotCommand.GetEBotCommandFromValue(botCommandArgs, handler);
     }
 
     private makeBotCommandResolvable(stringArray: string[]): string[] | null {
-        let botCommandWithArgs: string[] = stringArray.concat(); // コピー
+        let botCommandArgs: string[] = stringArray.concat(); // コピー
 
         if (this.hasBotCommandPrefix(stringArray)) {
             // prefix 分を除く
-            botCommandWithArgs[0] = botCommandWithArgs[0].slice(Defines.BOT_COMMAND_PREFIX.length);
-            return botCommandWithArgs;
+            botCommandArgs[0] = botCommandArgs[0].slice(Defines.BOT_COMMAND_PREFIX.length);
+            return botCommandArgs;
         }
         else if (this.hasMentionToMeFirst(stringArray)) {
             // 先頭のメンションを除く
-            botCommandWithArgs.shift();
-            return botCommandWithArgs;
+            botCommandArgs.shift();
+            return botCommandArgs;
         }
         else {
             // コマンドではない

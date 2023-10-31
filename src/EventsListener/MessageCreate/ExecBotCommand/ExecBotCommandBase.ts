@@ -4,13 +4,13 @@ import { IExecBotCommand } from "./IExecBotCommand";
 
 export abstract class ExecBotCommandBase implements IExecBotCommand {
     botCommand: string;
-    botCommandWithArgs: string[];
+    botCommandArgs: string[];
 
     handler: IHandlerMessage;
 
-    constructor(botCommandWithArgs: string[], handler: IHandlerMessage) {
-        this.botCommand = botCommandWithArgs[0];
-        this.botCommandWithArgs = botCommandWithArgs;
+    constructor(botCommandArgs: string[], handler: IHandlerMessage) {
+        this.botCommand = botCommandArgs[0];
+        this.botCommandArgs = botCommandArgs;
 
         this.handler = handler;
     }
