@@ -1,4 +1,5 @@
 import { GatewayIntentBits } from "discord.js";
+require('dotenv').config();
 
 export namespace Defines {
     export const APP_VERSION: string | undefined = process.env.npm_package_version;
