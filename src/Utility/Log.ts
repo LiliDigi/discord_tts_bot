@@ -31,4 +31,9 @@ export class Log {
         this.ConfigureSingletonLogger();
         this.logger?.info(message);
     }
+
+    public static Warn(message: string): void {
+        this.ConfigureSingletonLogger();
+        this.logger?.warn(message);
+    }
 }
