@@ -6,17 +6,17 @@ import { ExecBotCommandTts } from './Tts/ExecBotCommandTts';
 import { ExecBotCommandWikipedia } from './Wikipedia/ExecBotCommandWikipedia';
 
 export class ClassifyBotCommand {
-    public static GetEBotCommandFromValue(botCommandWithArgs: string[], handler: IHandlerMessage): IExecBotCommand | null {
-        const command: string = botCommandWithArgs[0];
+    public static GetClassifiedInstance(botCommandArgs: string[], handler: IHandlerMessage): IExecBotCommand | null {
+        const command: string = botCommandArgs[0];
         switch (command) {
             case 'help':
             case 'h':
-                return new ExecBotCommandHelp(botCommandWithArgs, handler);
+                return new ExecBotCommandHelp(botCommandArgs, handler);
             case 'tts':
-                return new ExecBotCommandTts(botCommandWithArgs, handler);
+                return new ExecBotCommandTts(botCommandArgs, handler);
             case 'wikipedia':
             case 'w':
-                return new ExecBotCommandWikipedia(botCommandWithArgs, handler);
+                return new ExecBotCommandWikipedia(botCommandArgs, handler);
             default:
                 return null;
         }

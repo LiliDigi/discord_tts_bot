@@ -9,9 +9,9 @@ export class ExecBotCommandWikipedia extends ExecBotCommandBase {
 
     private wordTarget: string;
 
-    constructor(botCommandWithArgs: string[], handler: IHandlerMessage) {
-        super(botCommandWithArgs, handler);
-        this.wordTarget = this.botCommandWithArgs.slice(1).join(" ");
+    constructor(botCommandArgs: string[], handler: IHandlerMessage) {
+        super(botCommandArgs, handler);
+        this.wordTarget = this.botCommandArgs.slice(1).join(" ");
     }
 
     public Execute(): void {

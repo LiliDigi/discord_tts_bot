@@ -11,10 +11,17 @@ class Main {
 
     public async StartBot() {
         this.configureLog4js();
+        this.checkStartupConditions();
 
         const client = new Client({ intents: Defines.GATEWAY_INTENTS_BITS });
         this.registerListener(client);
         await this.attemptLogin(client);
+    }
+
+    private checkStartupConditions() {
+        if (Defines.HasUndefinedValues()) {
+            throw new ApplicationException("Defines contains undefined.");
+        }
     }
 
     public SummarizeException(applicationException: ApplicationException) {
