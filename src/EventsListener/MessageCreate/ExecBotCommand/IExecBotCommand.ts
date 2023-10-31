@@ -1,4 +1,4 @@
-import { IExecCommand } from "../IExecCommand";
+import { IExecCommand } from "../../IExecCommand";
 
 export interface IExecBotCommand extends IExecCommand {
     botCommand: string;

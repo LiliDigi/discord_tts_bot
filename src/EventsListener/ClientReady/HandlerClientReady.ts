@@ -2,6 +2,8 @@ import { ActivityType, Client, User } from "discord.js";
 import { IEventsHandler } from "../IEventsHandler";
 import { Defines } from "Core/Defines";
 import { Log } from "Utility/Log";
+import { InitRolePanel } from "./Init/RolePanel/InitRolePanel";
+import { IExecInit } from "./Init/IExecInit";
 
 export class HandlerClientReady implements IEventsHandler {
 
@@ -20,9 +22,19 @@ export class HandlerClientReady implements IEventsHandler {
             `version - ${ver}　　　　　　　　　　　　　　　　`,
             { type: ActivityType.Listening }
         );
-
+        this.init();
         Log.Trace("準備完了！");
 
     }
 
+    private init(): void {
+        const initTarget: IExecInit[] = [
+            new InitRolePanel("RolePanel", this)
+        ];
+
+        for (const target of initTarget) {
+            target.ExecuteWithCommonProcess();
+        }
+
+    }
 }
